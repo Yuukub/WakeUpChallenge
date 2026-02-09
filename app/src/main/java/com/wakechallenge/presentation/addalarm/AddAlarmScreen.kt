@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,10 +26,13 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -185,38 +189,48 @@ private fun TimePickerSection(
     val density = LocalDensity.current
     val itemHeightPx = with(density) { itemHeight.toPx() }
 
-    val hourListState = rememberLazyListState(
-        initialFirstVisibleItemIndex = maxOf(0, time.hour - 2)
-    )
-    val minuteListState = rememberLazyListState(
-        initialFirstVisibleItemIndex = maxOf(0, time.minute - 2)
-    )
+    val hoursCount = (Int.MAX_VALUE / 24) * 24
+    val minutesCount = (Int.MAX_VALUE / 60) * 60
+
+    // Ensure center is exactly 00:00 or 00 minutes
+    val hourCenter = (hoursCount / 2 / 24) * 24
+    val minuteCenter = (minutesCount / 2 / 60) * 60
+
+    val initialHourIndex = remember { hourCenter + time.hour }
+    val initialMinuteIndex = remember { minuteCenter + time.minute }
+
+    val hourListState = rememberLazyListState(initialFirstVisibleItemIndex = initialHourIndex)
+    val minuteListState = rememberLazyListState(initialFirstVisibleItemIndex = initialMinuteIndex)
     val coroutineScope = rememberCoroutineScope()
+    val haptics = LocalHapticFeedback.current
 
     // Scroll to correct position when time changes (e.g., when loading existing alarm)
     LaunchedEffect(time) {
-        hourListState.scrollToItem(maxOf(0, time.hour - 2))
-        minuteListState.scrollToItem(maxOf(0, time.minute - 2))
-    }
-
-    // Update time when scroll stops
-    LaunchedEffect(hourListState.isScrollInProgress) {
-        if (!hourListState.isScrollInProgress) {
-            val centerIndex = hourListState.firstVisibleItemIndex + 2
-            val newHour = centerIndex.coerceIn(0, 23)
-            if (newHour != time.hour) {
-                onTimeChange(LocalTime.of(newHour, time.minute))
-            }
+        val currentHour = hourListState.firstVisibleItemIndex % 24
+        if (currentHour != time.hour) {
+            hourListState.scrollToItem(hourCenter + time.hour)
+        }
+        
+        val currentMinute = minuteListState.firstVisibleItemIndex % 60
+        if (currentMinute != time.minute) {
+            minuteListState.scrollToItem(minuteCenter + time.minute)
         }
     }
 
-    LaunchedEffect(minuteListState.isScrollInProgress) {
-        if (!minuteListState.isScrollInProgress) {
-            val centerIndex = minuteListState.firstVisibleItemIndex + 2
-            val newMinute = centerIndex.coerceIn(0, 59)
-            if (newMinute != time.minute) {
-                onTimeChange(LocalTime.of(time.hour, newMinute))
-            }
+    // Update time and provide haptics when scroll stops
+    LaunchedEffect(hourListState.firstVisibleItemIndex) {
+        val newHour = hourListState.firstVisibleItemIndex % 24
+        if (newHour != time.hour) {
+            onTimeChange(LocalTime.of(newHour, time.minute))
+            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+        }
+    }
+
+    LaunchedEffect(minuteListState.firstVisibleItemIndex) {
+        val newMinute = minuteListState.firstVisibleItemIndex % 60
+        if (newMinute != time.minute) {
+            onTimeChange(LocalTime.of(time.hour, newMinute))
+            haptics.performHapticFeedback(HapticFeedbackType.TextHandleMove)
         }
     }
 
@@ -277,15 +291,30 @@ private fun TimePickerSection(
                             flingBehavior = rememberSnapFlingBehavior(lazyListState = hourListState),
                             contentPadding = PaddingValues(vertical = itemHeight * 2)
                         ) {
-                            items(24) { hour ->
-                                val isSelected = hourListState.firstVisibleItemIndex + 2 == hour
+                            items(hoursCount) { index ->
+                                val hour = index % 24
+                                
+                                // Calculate precise distance from center using scroll offset for real-time animation
+                                val scrollOffset = hourListState.firstVisibleItemScrollOffset / itemHeightPx
+                                val preciseDistance = index - hourListState.firstVisibleItemIndex - scrollOffset
+                                val absDistance = abs(preciseDistance)
+                                
+                                // Dynamic visuals based on precise distance
+                                val isSelected = absDistance < 0.5f
+                                val opacity = (1f - (absDistance * 0.3f)).coerceIn(0.2f, 1f)
+                                val scale = (1f - (absDistance * 0.12f)).coerceIn(0.65f, 1f)
+                                val rotationX = preciseDistance * 18f // Simulated cylinder rotation
+                                
                                 WheelPickerItem(
                                     text = String.format("%02d", hour),
                                     isSelected = isSelected,
                                     height = itemHeight,
+                                    opacity = opacity,
+                                    scale = scale,
+                                    rotationX = rotationX,
                                     onClick = {
                                         coroutineScope.launch {
-                                            hourListState.animateScrollToItem(maxOf(0, hour - 2))
+                                            hourListState.animateScrollToItem(index)
                                         }
                                     }
                                 )
@@ -299,9 +328,10 @@ private fun TimePickerSection(
                     // Separator
                     Text(
                         text = ":",
-                        fontSize = 48.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        fontSize = 40.sp,
+                        fontWeight = FontWeight.Black,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.padding(bottom = 4.dp)
                     )
 
                     // Minutes wheel
@@ -318,15 +348,29 @@ private fun TimePickerSection(
                             flingBehavior = rememberSnapFlingBehavior(lazyListState = minuteListState),
                             contentPadding = PaddingValues(vertical = itemHeight * 2)
                         ) {
-                            items(60) { minute ->
-                                val isSelected = minuteListState.firstVisibleItemIndex + 2 == minute
+                            items(minutesCount) { index ->
+                                val minute = index % 60
+                                
+                                // Calculate precise distance from center using scroll offset
+                                val scrollOffset = minuteListState.firstVisibleItemScrollOffset / itemHeightPx
+                                val preciseDistance = index - minuteListState.firstVisibleItemIndex - scrollOffset
+                                val absDistance = abs(preciseDistance)
+                                
+                                val isSelected = absDistance < 0.5f
+                                val opacity = (1f - (absDistance * 0.3f)).coerceIn(0.2f, 1f)
+                                val scale = (1f - (absDistance * 0.12f)).coerceIn(0.65f, 1f)
+                                val rotationX = preciseDistance * 18f
+                                
                                 WheelPickerItem(
                                     text = String.format("%02d", minute),
                                     isSelected = isSelected,
                                     height = itemHeight,
+                                    opacity = opacity,
+                                    scale = scale,
+                                    rotationX = rotationX,
                                     onClick = {
                                         coroutineScope.launch {
-                                            minuteListState.animateScrollToItem(maxOf(0, minute - 2))
+                                            minuteListState.animateScrollToItem(index)
                                         }
                                     }
                                 )
@@ -347,22 +391,33 @@ private fun WheelPickerItem(
     text: String,
     isSelected: Boolean,
     height: androidx.compose.ui.unit.Dp,
+    opacity: Float = 1f,
+    scale: Float = 1f,
+    rotationX: Float = 0f,
     onClick: () -> Unit
 ) {
     Box(
         modifier = Modifier
             .height(height)
             .fillMaxWidth()
-            .clickable(onClick = onClick),
+            .graphicsLayer {
+                this.alpha = opacity
+                this.scaleX = scale
+                this.scaleY = scale
+                this.rotationX = rotationX
+            }
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onClick
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = text,
-            fontSize = if (isSelected) 40.sp else 24.sp,
-            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-            color = MaterialTheme.colorScheme.onPrimaryContainer.copy(
-                alpha = if (isSelected) 1f else 0.4f
-            ),
+            fontSize = 32.sp,
+            fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             textAlign = TextAlign.Center
         )
     }

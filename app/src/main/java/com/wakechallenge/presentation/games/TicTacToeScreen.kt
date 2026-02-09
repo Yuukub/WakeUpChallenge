@@ -337,6 +337,7 @@ fun TicTacToeScreen(
         }
     }
 }
+}
 
 @Composable
 private fun TicTacToeCell(

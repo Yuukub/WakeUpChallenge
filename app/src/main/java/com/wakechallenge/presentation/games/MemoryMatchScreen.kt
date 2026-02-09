@@ -252,6 +252,7 @@ fun MemoryMatchScreen(
         }
     }
 }
+}
 
 @Composable
 private fun FlipCard(

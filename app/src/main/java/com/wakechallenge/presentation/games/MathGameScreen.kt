@@ -330,6 +330,7 @@ fun MathGameScreen(
         }
     }
 }
+}
 
 private fun generateProblem(difficulty: GameDifficulty): MathProblem {
     val (minNum, maxNum) = when (difficulty) {
