@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Wake Up Challenge</string>
+    <string name="widget_description">แสดงนาฬิกาปลุกถัดไปและเปิด/ปิดได้รวดเร็ว</string>
+    <string name="widget_name">วิดเจ็ตนาฬิกาปลุก</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Wake Up Challenge</string>
+    <string name="home_next_alarm">นาฬิกาปลุกถัดไป</string>
+    <string name="home_no_alarms">ยังไม่มีนาฬิกาปลุก</string>
+    <string name="home_add_first_alarm">แตะ + เพื่อเพิ่มนาฬิกาปลุกแรก</string>
+    <string name="home_games_count">%d เกม</string>
+    <string name="home_delete_alarm">ลบนาฬิกาปลุก</string>
+    <string name="home_delete_confirm">คุณต้องการลบนาฬิกาปลุกนี้หรือไม่?</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_statistics">สถิติ</string>
+    <string name="cd_achievements">รางวัล</string>
+    <string name="cd_settings">การตั้งค่า</string>
+    <string name="cd_add_alarm">เพิ่มนาฬิกาปลุก</string>
+    <string name="cd_delete">ลบ</string>
+    <string name="cd_back">กลับ</string>
+    <string name="cd_alarm">นาฬิกาปลุก</string>
+    <string name="cd_play">เล่น</string>
+    <string name="cd_stop">หยุด</string>
+
+    <!-- Alarm Screen -->
+    <string name="alarm_time_to_wake">ถึงเวลาตื่นแล้ว!</string>
+    <string name="alarm_snooze">เลื่อนปลุก (5 นาที)</string>
+    <string name="alarm_play_game">เล่นเกมเพื่อปิดปลุก</string>
+    <string name="alarm_complete_game">เล่นเกมให้จบเพื่อปิดนาฬิกาปลุก</string>
+
+    <!-- Add/Edit Alarm -->
+    <string name="add_alarm_new">นาฬิกาปลุกใหม่</string>
+    <string name="add_alarm_edit">แก้ไขนาฬิกาปลุก</string>
+    <string name="add_alarm_set_time">ตั้งเวลา</string>
+    <string name="add_alarm_label">ชื่อ</string>
+    <string name="add_alarm_label_hint">ชื่อนาฬิกาปลุก (ไม่จำเป็น)</string>
+    <string name="add_alarm_repeat">ทำซ้ำ</string>
+    <string name="add_alarm_sound">เสียง</string>
+    <string name="add_alarm_select_sound">เลือกเสียงปลุก</string>
+    <string name="add_alarm_vibration">สั่น</string>
+    <string name="add_alarm_snooze">เลื่อนปลุก</string>
+    <string name="add_alarm_snooze_enabled">เปิดใช้งานเลื่อนปลุก</string>
+    <string name="add_alarm_snooze_duration">ระยะเวลาเลื่อนปลุก</string>
+    <string name="add_alarm_max_snooze">เลื่อนปลุกได้สูงสุด: %d ครั้ง</string>
+    <string name="add_alarm_select_games">เลือกเกมที่จะเล่น</string>
+    <string name="add_alarm_difficulty">ระดับความยาก</string>
+    <string name="add_alarm_gradual_volume">เสียงค่อยๆ ดัง</string>
+    <string name="add_alarm_gradual_volume_desc">เสียงจะค่อยๆ ดังขึ้น</string>
+
+    <!-- Days of Week -->
+    <string name="day_sun">อา.</string>
+    <string name="day_mon">จ.</string>
+    <string name="day_tue">อ.</string>
+    <string name="day_wed">พ.</string>
+    <string name="day_thu">พฤ.</string>
+    <string name="day_fri">ศ.</string>
+    <string name="day_sat">ส.</string>
+    <string name="day_once">ครั้งเดียว</string>
+    <string name="day_everyday">ทุกวัน</string>
+    <string name="day_weekdays">วันธรรมดา</string>
+    <string name="day_weekends">วันหยุด</string>
+
+    <!-- Games - Titles -->
+    <string name="game_math_title">โจทย์คณิตศาสตร์</string>
+    <string name="game_memory_title">จับคู่ความจำ</string>
+    <string name="game_tictactoe_title">โอ-เอ็กซ์</string>
+    <string name="game_phrase_title">พิมพ์ประโยค</string>
+    <string name="game_puzzle_title">ต่อภาพ</string>
+    <string name="game_color_title">จับคู่สี</string>
+
+    <!-- Games - Descriptions -->
+    <string name="game_math_desc">แก้โจทย์คณิตศาสตร์</string>
+    <string name="game_memory_desc">หาคู่ที่ตรงกัน</string>
+    <string name="game_tictactoe_desc">ชนะ AI</string>
+    <string name="game_phrase_desc">พิมพ์ประโยคให้ถูกต้อง</string>
+    <string name="game_puzzle_desc">เรียงชิ้นส่วนให้ถูกต้อง</string>
+    <string name="game_color_desc">จับคู่สีให้ตรงกัน</string>
+
+    <!-- Games - Instructions -->
+    <string name="game_math_instruction">แก้โจทย์ %d ข้อ</string>
+    <string name="game_memory_instruction">หาคู่ที่ตรงกันทั้งหมด</string>
+    <string name="game_tictactoe_instruction">ชนะ AI เพื่อปิดปลุก</string>
+    <string name="game_phrase_instruction">พิมพ์ประโยคให้ถูกต้อง</string>
+    <string name="game_puzzle_instruction">เรียงชิ้นส่วนให้ถูกต้อง</string>
+    <string name="game_color_instruction">จับคู่สีให้ตรงกัน</string>
+
+    <!-- Games - UI -->
+    <string name="game_submit">ส่งคำตอบ</string>
+    <string name="game_you_win">คุณชนะ!</string>
+    <string name="game_ai_wins">AI ชนะ!</string>
+    <string name="game_draw">เสมอ!</string>
+    <string name="game_your_turn">ตาคุณ</string>
+    <string name="game_ai_turn">ตา AI</string>
+    <string name="game_tap_color">แตะสี%s</string>
+    <string name="game_moves">จำนวนการเดิน: %d</string>
+    <string name="game_tictactoe_you_win">คุณชนะ!</string>
+    <string name="game_tictactoe_draw">เสมอ!</string>
+    <string name="game_tictactoe_must_win">เสมอ! ต้องชนะถึงจะปิดนาฬิกาได้ ลองใหม่!</string>
+    <string name="game_tictactoe_you_lose">คุณแพ้! ลองอีกครั้ง</string>
+    <string name="game_tictactoe_your_turn">ตาคุณ (X)</string>
+    <string name="game_tictactoe_ai_thinking">AI กำลังคิด...</string>
+    <string name="game_dismiss_alarm">ปิดนาฬิกาปลุก</string>
+    <string name="game_play_again">เล่นอีกครั้ง</string>
+    <string name="game_phrase_matched">ตรงกัน %d%%</string>
+    <string name="game_phrase_target">ประโยคเป้าหมาย:</string>
+    <string name="game_phrase_type_here">พิมพ์ที่นี่</string>
+    <string name="game_puzzle_moves">การเดิน</string>
+    <string name="game_puzzle_correct">ถูกต้อง</string>
+    <string name="game_puzzle_solved">เสร็จใน %d การเดิน!</string>
+    <string name="game_color_find">หาสีนี้:</string>
+    <string name="game_correct">ถูกต้อง!</string>
+    <string name="game_try_again">ลองอีกครั้ง!</string>
+    <string name="game_give_up">ยอมแพ้</string>
+    <string name="game_give_up_confirm">ลดระดับเป็น %s หรือไม่?</string>
+
+    <!-- Color Names -->
+    <string name="color_red">แดง</string>
+    <string name="color_blue">น้ำเงิน</string>
+    <string name="color_green">เขียว</string>
+    <string name="color_yellow">เหลือง</string>
+    <string name="color_purple">ม่วง</string>
+    <string name="color_orange">ส้ม</string>
+    <string name="color_pink">ชมพู</string>
+    <string name="color_cyan">ฟ้า</string>
+    <string name="color_lime">เขียวอ่อน</string>
+    <string name="color_indigo">คราม</string>
+    <string name="color_teal">เขียวน้ำทะเล</string>
+    <string name="color_amber">อำพัน</string>
+
+    <!-- Difficulty Selection -->
+    <string name="difficulty_select">เลือกระดับความยาก</string>
+    <string name="difficulty_select_desc">เลือกระดับความยากสำหรับฝึกซ้อม</string>
+    <string name="difficulty_easy">ง่าย</string>
+    <string name="difficulty_medium">ปานกลาง</string>
+    <string name="difficulty_hard">ยาก</string>
+
+    <!-- Difficulty Descriptions -->
+    <string name="diff_math_easy">ตัวเลข 1–10, + และ -</string>
+    <string name="diff_math_medium">ตัวเลข 10–50, +, - และ ×</string>
+    <string name="diff_math_hard">ตัวเลข 50–100, ทุกเครื่องหมาย</string>
+    <string name="diff_tictactoe_easy">AI เดินสุ่ม</string>
+    <string name="diff_tictactoe_medium">AI ฉลาด 50%</string>
+    <string name="diff_tictactoe_hard">AI เล่นดีที่สุด</string>
+    <string name="diff_memory_easy">6 ใบ (3 คู่)</string>
+    <string name="diff_memory_medium">16 ใบ (8 คู่)</string>
+    <string name="diff_memory_hard">36 ใบ (18 คู่)</string>
+    <string name="diff_phrase_easy">ประโยคสั้นง่ายๆ</string>
+    <string name="diff_phrase_medium">ประโยคความยาวปานกลาง</string>
+    <string name="diff_phrase_hard">ประโยคยาวซับซ้อน</string>
+    <string name="diff_puzzle_easy">ต่อภาพ 3×3 (8 ชิ้น)</string>
+    <string name="diff_puzzle_medium">ต่อภาพ 4×4 (15 ชิ้น)</string>
+    <string name="diff_puzzle_hard">ต่อภาพ 5×5 (24 ชิ้น)</string>
+    <string name="diff_color_easy">จับคู่ 5 สี</string>
+    <string name="diff_color_medium">จับคู่ 8 สี</string>
+    <string name="diff_color_hard">จับคู่ 12 สี</string>
+
+    <!-- Statistics -->
+    <string name="stats_title">สถิติ</string>
+    <string name="stats_total_wakeups">ตื่นทั้งหมด</string>
+    <string name="stats_current_streak">สถิติติดต่อกัน</string>
+    <string name="stats_avg_time">เวลาเฉลี่ย</string>
+    <string name="stats_games_played">เกมที่เล่น</string>
+    <string name="stats_days">วัน</string>
+
+    <!-- Achievements -->
+    <string name="achievements_title">รางวัล</string>
+    <string name="achievements_unlocked">ปลดล็อกแล้ว</string>
+    <string name="achievements_locked">ยังไม่ปลดล็อก</string>
+
+    <!-- Settings -->
+    <string name="settings_title">การตั้งค่า</string>
+    <string name="settings_general">ทั่วไป</string>
+    <string name="settings_dark_mode">โหมดมืด</string>
+    <string name="settings_dark_mode_desc">ใช้ธีมสีเข้ม</string>
+    <string name="settings_language">ภาษา</string>
+    <string name="settings_language_desc">เลือกภาษาของแอป</string>
+    <string name="language_system">ตามระบบ</string>
+    <string name="language_english">English</string>
+    <string name="language_thai">ไทย (Thai)</string>
+    <string name="settings_alarm_defaults">ค่าเริ่มต้นนาฬิกาปลุก</string>
+    <string name="settings_snooze_duration">ระยะเวลาเลื่อนปลุก</string>
+    <string name="settings_snooze_duration_value">%d นาที</string>
+    <string name="settings_vibration">สั่น</string>
+    <string name="settings_vibration_desc">สั่นเมื่อปลุก</string>
+    <string name="settings_smart_features">ฟีเจอร์อัจฉริยะ</string>
+    <string name="settings_gradual_volume">เสียงค่อยๆ ดัง</string>
+    <string name="settings_gradual_volume_desc">เสียงจะค่อยๆ ดังขึ้น</string>
+    <string name="settings_gradual_duration">ระยะเวลาเสียงค่อยๆ ดัง</string>
+    <string name="settings_gradual_duration_value">%d วินาที</string>
+    <string name="settings_smart_alarm">นาฬิกาปลุกอัจฉริยะ</string>
+    <string name="settings_smart_alarm_desc">ปลุกในช่วงหลับตื้น</string>
+    <string name="settings_smart_window">ช่วงเวลาปลุกอัจฉริยะ</string>
+    <string name="settings_smart_window_value">%d นาทีก่อนปลุก</string>
+    <string name="settings_games">เกม</string>
+    <string name="settings_practice">ฝึกซ้อมเกม</string>
+    <string name="settings_practice_desc">ลองเล่นเกมก่อนตั้งปลุก</string>
+    <string name="settings_about">เกี่ยวกับ</string>
+    <string name="settings_version">เวอร์ชัน</string>
+    <string name="settings_developer">ผู้พัฒนา</string>
+    <string name="settings_developer_name">ทีม Wake Up Challenge</string>
+
+    <!-- Time durations -->
+    <string name="duration_seconds">%d วินาที</string>
+    <string name="duration_1_minute">1 นาที</string>
+    <string name="duration_minutes">%d นาที</string>
+
+    <!-- Sound Picker -->
+    <string name="sound_picker_title">เลือกเสียง</string>
+    <string name="sound_default">เสียงปลุกเริ่มต้น</string>
+    <string name="sound_none">ไม่มีเสียง</string>
+    <string name="sound_custom">กำหนดเอง</string>
+    <string name="sound_record">อัดเสียงเอง</string>
+    <string name="sound_tts">ข้อความเป็นเสียง</string>
+    <string name="sound_alarm_sound">เสียงปลุก</string>
+    <string name="sound_custom_sounds">เสียงกำหนดเอง</string>
+    <string name="sound_choose_music">เลือกจากเพลง</string>
+    <string name="sound_choose_music_desc">เลือกเพลงจากอุปกรณ์</string>
+    <string name="sound_record_desc">อัดเสียงปลุกของคุณเอง</string>
+    <string name="sound_tts_desc">สร้างข้อความเสียงปลุก</string>
+    <string name="sound_default_sounds">เสียงปลุกเริ่มต้น</string>
+
+    <!-- Audio Recorder -->
+    <string name="recorder_title">บันทึกเสียง</string>
+    <string name="recorder_tap_to_record">แตะเพื่อบันทึก</string>
+    <string name="recorder_recording">กำลังบันทึก…</string>
+    <string name="recorder_tap_to_stop">แตะเพื่อหยุด</string>
+    <string name="recorder_play">เล่น</string>
+    <string name="recorder_save">บันทึก</string>
+    <string name="recorder_delete">ลบ</string>
+    <string name="sound_record_title">บันทึกเสียง</string>
+    <string name="sound_mic_permission">ต้องขอสิทธิ์ใช้ไมโครโฟน</string>
+    <string name="sound_grant_permission">อนุญาต</string>
+    <string name="sound_recording">กำลังบันทึก...</string>
+    <string name="sound_paused">หยุดชั่วคราว</string>
+    <string name="sound_recording_complete">บันทึกเสร็จสิ้น</string>
+    <string name="sound_tap_to_record">แตะเพื่อเริ่มบันทึก</string>
+    <string name="sound_record_again">บันทึกใหม่</string>
+
+    <!-- TTS -->
+    <string name="tts_title">ข้อความเป็นเสียง</string>
+    <string name="tts_enter_message">ใส่ข้อความปลุก</string>
+    <string name="tts_preview">ตัวอย่าง</string>
+    <string name="tts_save">บันทึก</string>
+    <string name="sound_tts_title">ข้อความเป็นเสียง</string>
+    <string name="tts_message_label">ข้อความที่จะพูด</string>
+    <string name="tts_message_hint">ใส่ข้อความปลุกของคุณ...</string>
+    <string name="tts_suggestions">คำแนะนำ</string>
+    <string name="tts_voice_settings">การตั้งค่าเสียง</string>
+    <string name="tts_language">ภาษา</string>
+    <string name="tts_speech_rate">ความเร็วพูด</string>
+    <string name="tts_pitch">ระดับเสียง</string>
+    <string name="tts_stop_preview">หยุดตัวอย่าง</string>
+    <string name="tts_loading">กำลังโหลดเครื่องมือแปลงข้อความ...</string>
+
+    <!-- Common -->
+    <string name="save">บันทึก</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="delete">ลบ</string>
+    <string name="close">ปิด</string>
+    <string name="back">กลับ</string>
+    <string name="play">เล่น</string>
+    <string name="ok">ตกลง</string>
+    <string name="yes">ใช่</string>
+    <string name="no">ไม่</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_alarm">นาฬิกาปลุก</string>
+    <string name="notification_alarm_title">Wake Up Challenge</string>
+    <string name="notification_alarm_text">ถึงเวลาตื่นแล้ว! เล่นเกมให้จบเพื่อปิดปลุก</string>
+    <string name="notification_snooze">เลื่อนปลุก</string>
+    <string name="notification_dismiss">ปิดปลุก</string>
+</resources>

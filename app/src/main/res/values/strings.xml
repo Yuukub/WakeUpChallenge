@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Wake Up Challenge</string>
+    <string name="widget_description">Shows your next alarm and allows quick toggle</string>
+    <string name="widget_name">Alarm Widget</string>
+
+    <!-- Home Screen -->
+    <string name="home_title">Wake Up Challenge</string>
+    <string name="home_next_alarm">Next Alarm</string>
+    <string name="home_no_alarms">No alarms yet</string>
+    <string name="home_add_first_alarm">Tap + to add your first alarm</string>
+    <string name="home_games_count">%d game(s)</string>
+    <string name="home_delete_alarm">Delete Alarm</string>
+    <string name="home_delete_confirm">Are you sure you want to delete this alarm?</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_statistics">Statistics</string>
+    <string name="cd_achievements">Achievements</string>
+    <string name="cd_settings">Settings</string>
+    <string name="cd_add_alarm">Add Alarm</string>
+    <string name="cd_delete">Delete</string>
+    <string name="cd_back">Back</string>
+    <string name="cd_alarm">Alarm</string>
+    <string name="cd_play">Play</string>
+    <string name="cd_stop">Stop</string>
+
+    <!-- Alarm Screen -->
+    <string name="alarm_time_to_wake">Time to Wake Up!</string>
+    <string name="alarm_snooze">Snooze (5 min)</string>
+    <string name="alarm_play_game">Play Game to Dismiss</string>
+    <string name="alarm_complete_game">Complete the game to turn off the alarm</string>
+
+    <!-- Add/Edit Alarm -->
+    <string name="add_alarm_new">New Alarm</string>
+    <string name="add_alarm_edit">Edit Alarm</string>
+    <string name="add_alarm_set_time">Set Time</string>
+    <string name="add_alarm_label">Label</string>
+    <string name="add_alarm_label_hint">Alarm label (optional)</string>
+    <string name="add_alarm_repeat">Repeat</string>
+    <string name="add_alarm_sound">Sound</string>
+    <string name="add_alarm_select_sound">Select alarm sound</string>
+    <string name="add_alarm_vibration">Vibration</string>
+    <string name="add_alarm_snooze">Snooze</string>
+    <string name="add_alarm_snooze_enabled">Enable snooze</string>
+    <string name="add_alarm_snooze_duration">Snooze duration</string>
+    <string name="add_alarm_max_snooze">Max snooze: %d times</string>
+    <string name="add_alarm_select_games">Select games to play</string>
+    <string name="add_alarm_difficulty">Difficulty</string>
+    <string name="add_alarm_gradual_volume">Gradual Volume</string>
+    <string name="add_alarm_gradual_volume_desc">Sound gradually increases</string>
+
+    <!-- Days of Week -->
+    <string name="day_sun">Sun</string>
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="day_once">Once</string>
+    <string name="day_everyday">Every day</string>
+    <string name="day_weekdays">Weekdays</string>
+    <string name="day_weekends">Weekends</string>
+
+    <!-- Games - Titles -->
+    <string name="game_math_title">Math Challenge</string>
+    <string name="game_memory_title">Memory Match</string>
+    <string name="game_tictactoe_title">Tic-Tac-Toe</string>
+    <string name="game_phrase_title">Type the Phrase</string>
+    <string name="game_puzzle_title">Puzzle Slide</string>
+    <string name="game_color_title">Color Match</string>
+
+    <!-- Games - Descriptions -->
+    <string name="game_math_desc">Solve math problems</string>
+    <string name="game_memory_desc">Find matching pairs</string>
+    <string name="game_tictactoe_desc">Beat the AI</string>
+    <string name="game_phrase_desc">Type the phrase correctly</string>
+    <string name="game_puzzle_desc">Arrange tiles in order</string>
+    <string name="game_color_desc">Match the colors</string>
+
+    <!-- Games - Instructions -->
+    <string name="game_math_instruction">Solve %d math problems</string>
+    <string name="game_memory_instruction">Find all matching pairs</string>
+    <string name="game_tictactoe_instruction">Beat the AI to dismiss</string>
+    <string name="game_phrase_instruction">Type the phrase correctly</string>
+    <string name="game_puzzle_instruction">Arrange tiles in order</string>
+    <string name="game_color_instruction">Match the colors</string>
+
+    <!-- Games - UI -->
+    <string name="game_submit">Submit</string>
+    <string name="game_you_win">You Win!</string>
+    <string name="game_ai_wins">AI Wins!</string>
+    <string name="game_draw">Draw!</string>
+    <string name="game_your_turn">Your Turn</string>
+    <string name="game_ai_turn">AI\'s Turn</string>
+    <string name="game_tap_color">Tap the %s color</string>
+    <string name="game_moves">Moves: %d</string>
+    <string name="game_tictactoe_you_win">You Win!</string>
+    <string name="game_tictactoe_draw">It\'s a Draw!</string>
+    <string name="game_tictactoe_must_win">Draw! You must win to dismiss. Try again!</string>
+    <string name="game_tictactoe_you_lose">You Lose! Try again</string>
+    <string name="game_tictactoe_your_turn">Your turn (X)</string>
+    <string name="game_tictactoe_ai_thinking">AI is thinking...</string>
+    <string name="game_dismiss_alarm">Dismiss Alarm</string>
+    <string name="game_play_again">Play Again</string>
+    <string name="game_phrase_matched">%d%% matched</string>
+    <string name="game_phrase_target">Target phrase:</string>
+    <string name="game_phrase_type_here">Type here</string>
+    <string name="game_puzzle_moves">Moves</string>
+    <string name="game_puzzle_correct">Correct</string>
+    <string name="game_puzzle_solved">Solved in %d moves!</string>
+    <string name="game_color_find">Find this color:</string>
+    <string name="game_correct">Correct!</string>
+    <string name="game_try_again">Try again!</string>
+    <string name="game_give_up">Give Up</string>
+    <string name="game_give_up_confirm">Lower difficulty to %s?</string>
+
+    <!-- Color Names -->
+    <string name="color_red">Red</string>
+    <string name="color_blue">Blue</string>
+    <string name="color_green">Green</string>
+    <string name="color_yellow">Yellow</string>
+    <string name="color_purple">Purple</string>
+    <string name="color_orange">Orange</string>
+    <string name="color_pink">Pink</string>
+    <string name="color_cyan">Cyan</string>
+    <string name="color_lime">Lime</string>
+    <string name="color_indigo">Indigo</string>
+    <string name="color_teal">Teal</string>
+    <string name="color_amber">Amber</string>
+
+    <!-- Difficulty Selection -->
+    <string name="difficulty_select">Select Difficulty</string>
+    <string name="difficulty_select_desc">Choose a difficulty level to practice</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+
+    <!-- Difficulty Descriptions -->
+    <string name="diff_math_easy">Numbers 1–10, + and -</string>
+    <string name="diff_math_medium">Numbers 10–50, +, - and ×</string>
+    <string name="diff_math_hard">Numbers 50–100, all operations</string>
+    <string name="diff_tictactoe_easy">AI makes random moves</string>
+    <string name="diff_tictactoe_medium">AI is 50% smart</string>
+    <string name="diff_tictactoe_hard">AI plays optimally</string>
+    <string name="diff_memory_easy">6 cards (3 pairs)</string>
+    <string name="diff_memory_medium">16 cards (8 pairs)</string>
+    <string name="diff_memory_hard">36 cards (18 pairs)</string>
+    <string name="diff_phrase_easy">Short simple phrases</string>
+    <string name="diff_phrase_medium">Medium length sentences</string>
+    <string name="diff_phrase_hard">Long complex sentences</string>
+    <string name="diff_puzzle_easy">3×3 puzzle (8 tiles)</string>
+    <string name="diff_puzzle_medium">4×4 puzzle (15 tiles)</string>
+    <string name="diff_puzzle_hard">5×5 puzzle (24 tiles)</string>
+    <string name="diff_color_easy">Match 5 colors</string>
+    <string name="diff_color_medium">Match 8 colors</string>
+    <string name="diff_color_hard">Match 12 colors</string>
+
+    <!-- Statistics -->
+    <string name="stats_title">Statistics</string>
+    <string name="stats_total_wakeups">Total Wake Ups</string>
+    <string name="stats_current_streak">Current Streak</string>
+    <string name="stats_avg_time">Avg. Game Time</string>
+    <string name="stats_games_played">Games Played</string>
+    <string name="stats_days">days</string>
+
+    <!-- Achievements -->
+    <string name="achievements_title">Achievements</string>
+    <string name="achievements_unlocked">Unlocked</string>
+    <string name="achievements_locked">Locked</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_general">General</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode_desc">Use dark theme</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_desc">Choose app language</string>
+    <string name="language_system">System Default</string>
+    <string name="language_english">English</string>
+    <string name="language_thai">ไทย (Thai)</string>
+    <string name="settings_alarm_defaults">Alarm Defaults</string>
+    <string name="settings_snooze_duration">Default Snooze Duration</string>
+    <string name="settings_snooze_duration_value">%d minutes</string>
+    <string name="settings_vibration">Vibration</string>
+    <string name="settings_vibration_desc">Vibrate when alarm rings</string>
+    <string name="settings_smart_features">Smart Features</string>
+    <string name="settings_gradual_volume">Gradual Volume</string>
+    <string name="settings_gradual_volume_desc">Volume increases gradually</string>
+    <string name="settings_gradual_duration">Gradual Volume Duration</string>
+    <string name="settings_gradual_duration_value">%d seconds</string>
+    <string name="settings_smart_alarm">Smart Alarm</string>
+    <string name="settings_smart_alarm_desc">Wake you during light sleep</string>
+    <string name="settings_smart_window">Smart Alarm Window</string>
+    <string name="settings_smart_window_value">%d minutes before</string>
+    <string name="settings_games">Games</string>
+    <string name="settings_practice">Practice Games</string>
+    <string name="settings_practice_desc">Try games before setting alarms</string>
+    <string name="settings_about">About</string>
+    <string name="settings_version">Version</string>
+    <string name="settings_developer">Developer</string>
+    <string name="settings_developer_name">Wake Up Challenge Team</string>
+
+    <!-- Time durations -->
+    <string name="duration_seconds">%d seconds</string>
+    <string name="duration_1_minute">1 minute</string>
+    <string name="duration_minutes">%d minutes</string>
+
+    <!-- Sound Picker -->
+    <string name="sound_picker_title">Select Sound</string>
+    <string name="sound_default">Default Alarm</string>
+    <string name="sound_none">None</string>
+    <string name="sound_custom">Custom</string>
+    <string name="sound_record">Record Your Own</string>
+    <string name="sound_tts">Text to Speech</string>
+    <string name="sound_alarm_sound">Alarm Sound</string>
+    <string name="sound_custom_sounds">Custom Sounds</string>
+    <string name="sound_choose_music">Choose from Music</string>
+    <string name="sound_choose_music_desc">Select a song from your device</string>
+    <string name="sound_record_desc">Record your own alarm sound</string>
+    <string name="sound_tts_desc">Create spoken alarm message</string>
+    <string name="sound_default_sounds">Default Alarm Sounds</string>
+
+    <!-- Audio Recorder -->
+    <string name="recorder_title">Record Audio</string>
+    <string name="recorder_tap_to_record">Tap to record</string>
+    <string name="recorder_recording">Recording…</string>
+    <string name="recorder_tap_to_stop">Tap to stop</string>
+    <string name="recorder_play">Play</string>
+    <string name="recorder_save">Save</string>
+    <string name="recorder_delete">Delete</string>
+    <string name="sound_record_title">Record Sound</string>
+    <string name="sound_mic_permission">Microphone permission required</string>
+    <string name="sound_grant_permission">Grant Permission</string>
+    <string name="sound_recording">Recording...</string>
+    <string name="sound_paused">Paused</string>
+    <string name="sound_recording_complete">Recording complete</string>
+    <string name="sound_tap_to_record">Tap to start recording</string>
+    <string name="sound_record_again">Record Again</string>
+
+    <!-- TTS -->
+    <string name="tts_title">Text to Speech</string>
+    <string name="tts_enter_message">Enter your wake-up message</string>
+    <string name="tts_preview">Preview</string>
+    <string name="tts_save">Save</string>
+    <string name="sound_tts_title">Text-to-Speech</string>
+    <string name="tts_message_label">Message to speak</string>
+    <string name="tts_message_hint">Enter your wake-up message...</string>
+    <string name="tts_suggestions">Suggestions</string>
+    <string name="tts_voice_settings">Voice Settings</string>
+    <string name="tts_language">Language</string>
+    <string name="tts_speech_rate">Speech Rate</string>
+    <string name="tts_pitch">Pitch</string>
+    <string name="tts_stop_preview">Stop Preview</string>
+    <string name="tts_loading">Loading Text-to-Speech engine...</string>
+
+    <!-- Common -->
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="close">Close</string>
+    <string name="back">Back</string>
+    <string name="play">Play</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_alarm">Alarm</string>
+    <string name="notification_alarm_title">Wake Up Challenge</string>
+    <string name="notification_alarm_text">Time to wake up! Complete a game to dismiss.</string>
+    <string name="notification_snooze">Snooze</string>
+    <string name="notification_dismiss">Dismiss</string>
+</resources>

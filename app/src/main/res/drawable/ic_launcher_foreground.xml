@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Stylized Sun / Alarm Clock Foreground -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,34c-11.05,0 -20,8.95 -20,20s8.95,20 20,20s20,-8.95 20,-20s-8.95,-20 -20,-20zM54,68c-7.73,0 -14,-6.27 -14,-14s6.27,-14 14,-14s14,6.27 14,14s-6.27,14 -14,14z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,28V24M54,84V80M84,54H80M28,54H24M75.2,32.8l2.8,-2.8M32.8,75.2l-2.8,2.8M75.2,75.2l2.8,2.8M32.8,32.8l-2.8,-2.8"
+        android:strokeWidth="3"
+        android:strokeColor="#FFFFFF"
+        android:strokeLineCap="round" />
+    <!-- Clock Hands -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round"
+        android:pathData="M54,54l0,-10M54,54l7,7" />
+</vector>
