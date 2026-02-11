@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.wakechallenge.R
+import kotlinx.coroutines.delay
 import com.wakechallenge.domain.model.GameDifficulty
 import com.wakechallenge.presentation.components.ConfettiAnimation
 import com.wakechallenge.presentation.components.GameBackground
@@ -68,6 +69,7 @@ fun ColorMatchScreen(
     // Track which button was clicked and whether it was correct
     var clickedIndex by remember { mutableStateOf<Int?>(null) }
     var wasCorrectClick by remember { mutableStateOf<Boolean?>(null) }
+    var lastWasCorrect by remember { mutableStateOf(true) } // To prevent flickering on exit
 
     LaunchedEffect(matchCount) {
         if (matchCount >= requiredMatches) {
@@ -81,6 +83,10 @@ fun ColorMatchScreen(
 
     // Handle feedback and reset after delay
     LaunchedEffect(wasCorrectClick) {
+        if (wasCorrectClick != null) {
+            lastWasCorrect = wasCorrectClick == true
+        }
+
         if (wasCorrectClick == false) {
             shakeOffset.animateTo(
                 targetValue = 0f,
@@ -97,10 +103,12 @@ fun ColorMatchScreen(
         }
         if (wasCorrectClick != null) {
             delay(500)
-            // Reset state and generate new question if correct
+            // Reset state and generate new question if correct AND game not finished
             if (wasCorrectClick == true) {
-                targetColor = allColors.random()
-                options = generateOptions(targetColor, allColors)
+                if (matchCount < requiredMatches) {
+                    targetColor = allColors.random()
+                    options = generateOptions(targetColor, allColors)
+                }
             }
             clickedIndex = null
             wasCorrectClick = null
@@ -238,41 +246,41 @@ fun ColorMatchScreen(
             ) {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = stringResource(R.string.game_color_find),
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.White.copy(alpha = 0.8f)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .scale(targetPulse)
-                            .shadow(12.dp, CircleShape, spotColor = targetColor.color)
-                            .clip(CircleShape)
-                            .background(
-                                Brush.radialGradient(
-                                    colors = listOf(
-                                        targetColor.color,
-                                        targetColor.color.copy(alpha = 0.8f)
-                                    )
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.game_color_find),
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.White.copy(alpha = 0.8f)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .scale(targetPulse)
+                        .shadow(12.dp, CircleShape, spotColor = targetColor.color)
+                        .clip(CircleShape)
+                        .background(
+                            Brush.radialGradient(
+                                colors = listOf(
+                                    targetColor.color,
+                                    targetColor.color.copy(alpha = 0.8f)
                                 )
                             )
-                            .border(4.dp, Color.White.copy(alpha = 0.4f), CircleShape)
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = targetColor.name,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                }
+                        )
+                        .border(4.dp, Color.White.copy(alpha = 0.4f), CircleShape)
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = targetColor.name,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
             }
+        }
 
             Spacer(modifier = Modifier.height(28.dp))
 
@@ -317,7 +325,7 @@ fun ColorMatchScreen(
                 Card(
                     modifier = Modifier.padding(top = 24.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (wasCorrectClick == true)
+                        containerColor = if (lastWasCorrect)
                             Color.Green.copy(alpha = 0.2f)
                         else
                             Color.Red.copy(alpha = 0.2f)
@@ -325,10 +333,10 @@ fun ColorMatchScreen(
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
-                        text = if (wasCorrectClick == true) stringResource(R.string.game_correct) else stringResource(R.string.game_try_again),
+                        text = if (lastWasCorrect) stringResource(R.string.game_correct) else stringResource(R.string.game_try_again),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (wasCorrectClick == true) Color.Green else Color.Red,
+                        color = if (lastWasCorrect) Color.Green else Color.Red,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                     )
                 }
@@ -339,8 +347,12 @@ fun ColorMatchScreen(
             if (showConfetti) {
                 ConfettiAnimation(
                     modifier = Modifier.fillMaxSize(),
-                    onAnimationEnd = onGameComplete
+                    onAnimationEnd = {}
                 )
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                    onGameComplete()
+                }
             }
         }
     }

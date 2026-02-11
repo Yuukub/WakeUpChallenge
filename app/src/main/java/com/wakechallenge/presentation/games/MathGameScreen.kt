@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakechallenge.R
+import kotlinx.coroutines.delay
 import com.wakechallenge.domain.model.GameDifficulty
 import com.wakechallenge.presentation.components.ConfettiAnimation
 import com.wakechallenge.presentation.components.GameBackground
@@ -48,6 +49,7 @@ fun MathGameScreen(
     var correctCount by remember { mutableIntStateOf(0) }
     var selectedAnswer by remember { mutableStateOf<Int?>(null) }
     var isAnswerCorrect by remember { mutableStateOf<Boolean?>(null) }
+    var lastIsAnswerCorrect by remember { mutableStateOf(true) } // To prevent flickering
     var showConfetti by remember { mutableStateOf(false) }
     var problemKey by remember { mutableIntStateOf(0) }
 
@@ -94,12 +96,16 @@ fun MathGameScreen(
     // Handle answer feedback and generate new question
     LaunchedEffect(isAnswerCorrect) {
         if (isAnswerCorrect != null) {
+            lastIsAnswerCorrect = isAnswerCorrect == true
             kotlinx.coroutines.delay(800)
             if (isAnswerCorrect == true) {
-                val newProblem = generateProblem(difficulty)
-                currentProblem = newProblem
-                answerChoices = generateChoices(newProblem.answer)
-                problemKey++
+                // Only generate new problem if game is not over
+                if (correctCount < requiredCorrect) {
+                    val newProblem = generateProblem(difficulty)
+                    currentProblem = newProblem
+                    answerChoices = generateChoices(newProblem.answer)
+                    problemKey++
+                }
             }
             selectedAnswer = null
             isAnswerCorrect = null
@@ -185,8 +191,8 @@ fun MathGameScreen(
                             .padding(horizontal = 4.dp)
                             .size(12.dp)
                             .scale(scale),
-                        shape = RoundedCornerShape(50),
-                        color = color
+                            shape = RoundedCornerShape(50),
+                            color = color
                     ) {}
                 }
             }
@@ -300,7 +306,7 @@ fun MathGameScreen(
                 Card(
                     modifier = Modifier.padding(top = 8.dp),
                     colors = CardDefaults.cardColors(
-                        containerColor = if (isAnswerCorrect == true)
+                        containerColor = if (lastIsAnswerCorrect)
                             Color.Green.copy(alpha = 0.2f)
                         else
                             Color.Red.copy(alpha = 0.2f)
@@ -308,13 +314,13 @@ fun MathGameScreen(
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Text(
-                        text = if (isAnswerCorrect == true)
+                        text = if (lastIsAnswerCorrect)
                             stringResource(R.string.game_correct)
                         else
                             stringResource(R.string.game_try_again),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = if (isAnswerCorrect == true) Color.Green else Color.Red,
+                        color = if (lastIsAnswerCorrect) Color.Green else Color.Red,
                         modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp)
                     )
                 }
@@ -324,8 +330,12 @@ fun MathGameScreen(
             if (showConfetti) {
                 ConfettiAnimation(
                     modifier = Modifier.fillMaxSize(),
-                    onAnimationEnd = onGameComplete
+                    onAnimationEnd = {}
                 )
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                    onGameComplete()
+                }
             }
         }
     }

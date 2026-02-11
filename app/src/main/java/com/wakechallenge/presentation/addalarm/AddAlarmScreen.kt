@@ -33,6 +33,11 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.graphics.GraphicsLayerScope
+import androidx.compose.ui.draw.clip
+import androidx.compose.foundation.border
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -74,6 +79,8 @@ fun AddAlarmScreen(
         }
     }
 
+    val focusManager = LocalFocusManager.current
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -93,87 +100,98 @@ fun AddAlarmScreen(
             )
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                }
         ) {
-            // Time Picker
-            TimePickerSection(
-                time = uiState.time,
-                onTimeChange = { viewModel.updateTime(it) }
-            )
-
-            // Label
-            OutlinedTextField(
-                value = uiState.label,
-                onValueChange = { viewModel.updateLabel(it) },
-                label = { Text(stringResource(R.string.add_alarm_label)) },
-                placeholder = { Text(stringResource(R.string.add_alarm_label_hint)) },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true
-            )
-
-            // Repeat Days
-            RepeatDaysSection(
-                selectedDays = uiState.repeatDays,
-                onDayToggle = { viewModel.toggleRepeatDay(it) }
-            )
-
-            // Games Selection
-            GamesSection(
-                selectedGames = uiState.selectedGames,
-                onGameToggle = { viewModel.toggleGame(it) },
-                onPracticeGame = onPracticeGame
-            )
-
-            // Game Difficulty
-            DifficultySection(
-                difficulty = uiState.gameDifficulty,
-                onDifficultyChange = { viewModel.updateDifficulty(it) }
-            )
-
-            // Snooze Settings
-            SnoozeSection(
-                snoozeEnabled = uiState.snoozeEnabled,
-                snoozeDuration = uiState.snoozeDurationMinutes,
-                maxSnoozeCount = uiState.maxSnoozeCount,
-                onSnoozeEnabledChange = { viewModel.updateSnoozeEnabled(it) },
-                onSnoozeDurationChange = { viewModel.updateSnoozeDuration(it) },
-                onMaxSnoozeCountChange = { viewModel.updateMaxSnoozeCount(it) }
-            )
-
-            // Gradual Volume
-            GradualVolumeSection(
-                enabled = uiState.gradualVolumeEnabled,
-                duration = uiState.gradualVolumeDurationSeconds,
-                onEnabledChange = { viewModel.updateGradualVolumeEnabled(it) },
-                onDurationChange = { viewModel.updateGradualVolumeDuration(it) }
-            )
-
-            // Vibration
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
-                Text(stringResource(R.string.add_alarm_vibration), style = MaterialTheme.typography.titleMedium)
-                Switch(
-                    checked = uiState.isVibrationEnabled,
-                    onCheckedChange = { viewModel.updateVibrationEnabled(it) }
+                // Time Picker
+                TimePickerSection(
+                    time = uiState.time,
+                    onTimeChange = { viewModel.updateTime(it) }
                 )
+
+                // Label
+                OutlinedTextField(
+                    value = uiState.label,
+                    onValueChange = { viewModel.updateLabel(it) },
+                    label = { Text(stringResource(R.string.add_alarm_label)) },
+                    placeholder = { Text(stringResource(R.string.add_alarm_label_hint)) },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    shape = RoundedCornerShape(12.dp)
+                )
+
+                // Repeat Days
+                RepeatDaysSection(
+                    selectedDays = uiState.repeatDays,
+                    onDayToggle = { viewModel.toggleRepeatDay(it) }
+                )
+
+                // Games Selection
+                GamesSection(
+                    selectedGames = uiState.selectedGames,
+                    onGameToggle = { viewModel.toggleGame(it) },
+                    onPracticeGame = onPracticeGame
+                )
+
+                // Game Difficulty
+                DifficultySection(
+                    difficulty = uiState.gameDifficulty,
+                    onDifficultyChange = { viewModel.updateDifficulty(it) }
+                )
+
+                // Snooze Settings
+                SnoozeSection(
+                    snoozeEnabled = uiState.snoozeEnabled,
+                    snoozeDuration = uiState.snoozeDurationMinutes,
+                    maxSnoozeCount = uiState.maxSnoozeCount,
+                    onSnoozeEnabledChange = { viewModel.updateSnoozeEnabled(it) },
+                    onSnoozeDurationChange = { viewModel.updateSnoozeDuration(it) },
+                    onMaxSnoozeCountChange = { viewModel.updateMaxSnoozeCount(it) }
+                )
+
+                // Gradual Volume
+                GradualVolumeSection(
+                    enabled = uiState.gradualVolumeEnabled,
+                    duration = uiState.gradualVolumeDurationSeconds,
+                    onEnabledChange = { viewModel.updateGradualVolumeEnabled(it) },
+                    onDurationChange = { viewModel.updateGradualVolumeDuration(it) }
+                )
+
+                // Vibration
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(stringResource(R.string.add_alarm_vibration), style = MaterialTheme.typography.titleMedium)
+                    Switch(
+                        checked = uiState.isVibrationEnabled,
+                        onCheckedChange = { viewModel.updateVibrationEnabled(it) }
+                    )
+                }
+
+                // Sound Selection
+                SoundSection(
+                    soundUri = uiState.soundUri,
+                    onSelectSound = onSelectSound
+                )
+
+                Spacer(modifier = Modifier.height(32.dp))
             }
-
-            // Sound Selection
-            SoundSection(
-                soundUri = uiState.soundUri,
-                onSelectSound = onSelectSound
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -529,23 +547,24 @@ private fun GamesSection(
                 style = MaterialTheme.typography.titleMedium
             )
             Text(
-                text = stringResource(R.string.add_alarm_select_games),
+                text = "${selectedGames.size} selected",
                 style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                color = MaterialTheme.colorScheme.primary
             )
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
 
         LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.height(320.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            columns = GridCells.Fixed(3),
+            modifier = Modifier.height(260.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            userScrollEnabled = false
         ) {
             items(GameType.entries) { game ->
                 val isSelected = selectedGames.contains(game)
-                GameCard(
+                CompactGameCard(
                     game = game,
                     isSelected = isSelected,
                     onToggle = { onGameToggle(game) },
@@ -557,66 +576,88 @@ private fun GamesSection(
 }
 
 @Composable
-private fun GameCard(
+private fun CompactGameCard(
     game: GameType,
     isSelected: Boolean,
     onToggle: () -> Unit,
     onPractice: () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isSelected) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant
-            }
-        ),
-        border = if (isSelected) {
-            BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-        } else null
+    val icon = when (game) {
+        GameType.MATH -> Icons.Default.Calculate
+        GameType.MEMORY_MATCH -> Icons.Default.Apps
+        GameType.TIC_TAC_TOE -> Icons.Default.Grid3x3
+        GameType.TYPE_PHRASE -> Icons.Default.TextFields
+        GameType.PUZZLE_SLIDE -> Icons.Default.Extension
+        GameType.COLOR_MATCH -> Icons.Default.Palette
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(
+                if (isSelected) MaterialTheme.colorScheme.primaryContainer
+                else MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+            )
+            .border(
+                width = if (isSelected) 2.dp else 1.dp,
+                color = if (isSelected) MaterialTheme.colorScheme.primary 
+                        else MaterialTheme.colorScheme.outline.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable(onClick = onToggle)
+            .padding(8.dp),
+        contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onToggle)
-                .padding(12.dp)
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = game.localizedDisplayName(),
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.weight(1f)
-                )
-                Checkbox(
-                    checked = isSelected,
-                    onCheckedChange = { onToggle() }
-                )
-            }
-            Text(
-                text = game.localizedDescription(),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = if (isSelected) MaterialTheme.colorScheme.primary 
+                       else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(32.dp)
             )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = game.localizedDisplayName(),
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                color = if (isSelected) MaterialTheme.colorScheme.onPrimaryContainer 
+                        else MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            
             Spacer(modifier = Modifier.height(4.dp))
-            TextButton(
+            
+            // Subtle practice button
+            Surface(
                 onClick = onPractice,
-                modifier = Modifier.align(Alignment.End),
-                contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp)
+                color = Color.Transparent,
+                shape = CircleShape,
+                modifier = Modifier.size(24.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.PlayArrow,
                     contentDescription = stringResource(R.string.cd_play),
-                    modifier = Modifier.size(16.dp)
+                    tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                    modifier = Modifier.padding(4.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(stringResource(R.string.play), style = MaterialTheme.typography.labelSmall)
             }
+        }
+        
+        if (isSelected) {
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.TopEnd)
+            )
         }
     }
 }

@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakechallenge.R
+import kotlinx.coroutines.delay
 import com.wakechallenge.domain.model.GameDifficulty
 import com.wakechallenge.presentation.components.ConfettiAnimation
 import com.wakechallenge.presentation.components.GameBackground
@@ -38,9 +39,9 @@ fun PuzzleSlideScreen(
     onGiveUp: ((GameDifficulty) -> Unit)? = null
 ) {
     val gridSize = when (difficulty) {
-        GameDifficulty.EASY -> 3    // 3x3 = 8 tiles (easy)
-        GameDifficulty.MEDIUM -> 4  // 4x4 = 15 tiles (medium)
-        GameDifficulty.HARD -> 5    // 5x5 = 24 tiles (hard)
+        GameDifficulty.EASY -> 2    // 2x2 = 3 tiles (easy)
+        GameDifficulty.MEDIUM -> 3  // 3x3 = 8 tiles (medium)
+        GameDifficulty.HARD -> 4    // 4x4 = 15 tiles (hard)
     }
 
     val totalTiles = gridSize * gridSize
@@ -298,8 +299,14 @@ fun PuzzleSlideScreen(
             if (showConfetti) {
                 ConfettiAnimation(
                     modifier = Modifier.fillMaxSize(),
-                    onAnimationEnd = onGameComplete
+                    onAnimationEnd = {} // We handle completion via LaunchedEffect below
                 )
+
+                // Use LaunchedEffect to handle the delay and completion
+                LaunchedEffect(Unit) {
+                    delay(2000) // Wait for confetti
+                    onGameComplete()
+                }
             }
         }
     }

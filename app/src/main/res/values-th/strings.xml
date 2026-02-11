@@ -35,7 +35,7 @@
     <string name="add_alarm_new">นาฬิกาปลุกใหม่</string>
     <string name="add_alarm_edit">แก้ไขนาฬิกาปลุก</string>
     <string name="add_alarm_set_time">ตั้งเวลา</string>
-    <string name="add_alarm_label">ชื่อ</string>
+    <string name="add_alarm_label">ชื่อ (ไม่จำเป็น)</string>
     <string name="add_alarm_label_hint">ชื่อนาฬิกาปลุก (ไม่จำเป็น)</string>
     <string name="add_alarm_repeat">ทำซ้ำ</string>
     <string name="add_alarm_sound">เสียง</string>
@@ -113,8 +113,8 @@
     <string name="game_color_find">หาสีนี้:</string>
     <string name="game_correct">ถูกต้อง!</string>
     <string name="game_try_again">ลองอีกครั้ง!</string>
-    <string name="game_give_up">ยอมแพ้</string>
-    <string name="game_give_up_confirm">ลดระดับเป็น %s หรือไม่?</string>
+    <string name="game_give_up">ปรับระดับความยาก</string>
+    <string name="game_give_up_confirm">ปรับระดับเป็น %s หรือไม่?</string>
 
     <!-- Color Names -->
     <string name="color_red">แดง</string>

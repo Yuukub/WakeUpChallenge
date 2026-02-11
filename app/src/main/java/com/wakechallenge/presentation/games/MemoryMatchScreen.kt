@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakechallenge.R
+import kotlinx.coroutines.delay
 import com.wakechallenge.domain.model.GameDifficulty
 import com.wakechallenge.presentation.components.ConfettiAnimation
 import com.wakechallenge.presentation.components.GameBackground
@@ -246,8 +247,12 @@ fun MemoryMatchScreen(
             if (showConfetti) {
                 ConfettiAnimation(
                     modifier = Modifier.fillMaxSize(),
-                    onAnimationEnd = onGameComplete
+                    onAnimationEnd = {}
                 )
+                LaunchedEffect(Unit) {
+                    delay(2000)
+                    onGameComplete()
+                }
             }
         }
     }

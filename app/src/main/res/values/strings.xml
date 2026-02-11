@@ -35,7 +35,7 @@
     <string name="add_alarm_new">New Alarm</string>
     <string name="add_alarm_edit">Edit Alarm</string>
     <string name="add_alarm_set_time">Set Time</string>
-    <string name="add_alarm_label">Label</string>
+    <string name="add_alarm_label">Label (Optional)</string>
     <string name="add_alarm_label_hint">Alarm label (optional)</string>
     <string name="add_alarm_repeat">Repeat</string>
     <string name="add_alarm_sound">Sound</string>
@@ -113,7 +113,7 @@
     <string name="game_color_find">Find this color:</string>
     <string name="game_correct">Correct!</string>
     <string name="game_try_again">Try again!</string>
-    <string name="game_give_up">Give Up</string>
+    <string name="game_give_up">Adjust Difficulty</string>
     <string name="game_give_up_confirm">Lower difficulty to %s?</string>
 
     <!-- Color Names -->

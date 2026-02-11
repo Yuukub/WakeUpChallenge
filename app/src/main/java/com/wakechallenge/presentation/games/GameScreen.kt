@@ -1,9 +1,12 @@
 package com.wakechallenge.presentation.games
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -59,38 +62,61 @@ fun GameScreen(
     }
 
     // Key resets the game when difficulty changes
-    key(currentDifficulty) {
-        when (gameTypeEnum) {
-            GameType.MATH -> MathGameScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
-            GameType.TIC_TAC_TOE -> TicTacToeScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
-            GameType.MEMORY_MATCH -> MemoryMatchScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
-            GameType.TYPE_PHRASE -> TypePhraseScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
-            GameType.PUZZLE_SLIDE -> PuzzleSlideScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
-            GameType.COLOR_MATCH -> ColorMatchScreen(
-                difficulty = currentDifficulty,
-                onGameComplete = onComplete,
-                onGiveUp = onGiveUp
-            )
+    Box(modifier = Modifier.fillMaxSize()) {
+        key(currentDifficulty) {
+            when (gameTypeEnum) {
+                GameType.MATH -> MathGameScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+                GameType.TIC_TAC_TOE -> TicTacToeScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+                GameType.MEMORY_MATCH -> MemoryMatchScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+                GameType.TYPE_PHRASE -> TypePhraseScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+                GameType.PUZZLE_SLIDE -> PuzzleSlideScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+                GameType.COLOR_MATCH -> ColorMatchScreen(
+                    difficulty = currentDifficulty,
+                    onGameComplete = onComplete,
+                    onGiveUp = onGiveUp
+                )
+            }
+        }
+
+        // Exit button for Practice Mode
+        if (isPracticeMode) {
+            IconButton(
+                onClick = onGameComplete, // Reusing onGameComplete to exit/back
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(8.dp)
+                    .offset(y = 8.dp) // Adjust for status bar if needed, or rely on internal padding
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.close),
+                    tint = Color.White.copy(alpha = 0.7f),
+                    modifier = Modifier
+                        .size(32.dp)
+                        .background(Color.Black.copy(alpha = 0.3f), CircleShape)
+                        .padding(4.dp)
+                )
+            }
         }
     }
 }

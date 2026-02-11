@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.wakechallenge.R
+import kotlinx.coroutines.delay
 import com.wakechallenge.domain.model.GameDifficulty
 import com.wakechallenge.presentation.components.ConfettiAnimation
 import com.wakechallenge.presentation.components.GameBackground
@@ -66,8 +67,8 @@ fun TicTacToeScreen(
     LaunchedEffect(board) {
         val (result, cells) = checkGameResultWithWinningCells(board, Player.X)
         if (result != GameResult.ONGOING) {
-            // In EASY mode, draw means try again (must win to complete)
-            if (result == GameResult.DRAW && difficulty == GameDifficulty.EASY) {
+            // Draw means try again (must win to complete) for ALL difficulties
+            if (result == GameResult.DRAW) {
                 showMustWinMessage = true
                 delay(1500)
                 // Reset game
@@ -82,7 +83,7 @@ fun TicTacToeScreen(
                 winningCells = cells
                 delay(500)
                 showResult = true
-                if (result == GameResult.WIN || result == GameResult.DRAW) {
+                if (result == GameResult.WIN) {
                     showConfetti = true
                 }
             }
@@ -290,9 +291,39 @@ fun TicTacToeScreen(
                 enter = fadeIn() + slideInVertically { it },
                 exit = fadeOut()
             ) {
-                if (gameResult == GameResult.WIN || gameResult == GameResult.DRAW) {
-                    Button(
-                        onClick = onGameComplete,
+                if (gameResult == GameResult.WIN) {
+                    // Auto dismiss or manual dismiss with delay?
+                    // Original code: Button to dismiss.
+                    // Request: "Game some games after finish loop back to play a bit before close"
+                    // Interpretation: After winning, show confetti, maybe wait a bit, then allow close or auto close?
+                    // The user req 4: "Game some games after play finish have loop back to play again a bit before game close"
+                    // It likely means "Show result/confetti for a while then close".
+                    // But here we have a button "Dismiss Alarm".
+                    // Let's keep the button but maybe add delay if it was auto-triggering.
+                    // Wait, current design has a BUTTON to dismiss.
+                    // If user wants "loop back to play a bit", maybe they mean the animation continues?
+                    // Let's look at `ConfettiAnimation` in `PuzzleSlideScreen`: `onAnimationEnd = onGameComplete`
+                    // In `TicTacToeScreen`, it just shows button.
+                    // Let's make it consistent: Win -> Show Confetti -> Wait -> Show Button OR Auto Close?
+                    // User said: "play finish loop back to play again a bit before game close".
+                    // This is slightly ambiguous. "Loop back to play again"? Maybe they mean "Stay on screen"?
+                    // "Game some games after play finish have loop back to play again a bit before game close"
+                    // Re-reading Thai: "เกมบางเกมพอเล่นจบแล้วมีวนกลับมาให้เล่นอีกแปบนึงก่อนที่เกมจะปิดไป"
+                    // "Some games when finished have loop back to play again a moment before game closes"
+                    // Sounds like: The game restarts or lingers?
+                    // "before the game closes" implies it closes automatically?
+                    // Let's assume they mean: "After winning, stay on result screen for a bit so I can see I won, before it closes/I allow close".
+                    // In TicTacToe, we have a manual "Dismiss Alarm" button.
+                    // Let's add the Auto-Close logic with delay if that matches expectation, OR just ensure the confetti plays.
+                    // The confetti is already there.
+                    // Let me apply the "Win Only" logic change first fully.
+                    
+                     Button(
+                        onClick = {
+                             // Add delay here? No, this is manual click.
+                             // Maybe the user wants AUTO CLOSE with delay?
+                             onGameComplete()
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(56.dp),
