@@ -63,12 +63,12 @@ fun SoundPickerScreen(
         sounds.toList()
     }
 
-    // Permission launcher for audio files
-    val audioPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        // Handle permission result
-    }
+    // NEW: Observe results from recorder/TTS screens
+    // We need to access the NavController's backstack entry for this
+    // Since we don't have it here, we'll assume it's passed via parameter or handled in NavHost
+    // Actually, let's fix the NavHost to pass these back.
+    // However, we can fix the default sound selection here.
+
 
     // Music picker launcher
     val musicPickerLauncher = rememberLauncherForActivityResult(
@@ -82,7 +82,15 @@ fun SoundPickerScreen(
                 type = SoundType.MUSIC
             )
             onSoundSelected(sound)
-            onNavigateBack()
+        }
+    }
+
+    // Permission launcher for audio files
+    val audioPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            musicPickerLauncher.launch("audio/*")
         }
     }
 
@@ -128,17 +136,19 @@ fun SoundPickerScreen(
                 actions = {
                     TextButton(onClick = {
                         mediaPlayer?.release()
-                        selectedSound?.let {
+                        selectedSound?.let { uri ->
+                            val soundName = defaultSounds.find { it.uri == uri }?.name 
+                                ?: if (uri.startsWith("content://")) "Custom Music" else "Selected Sound"
+                            
                             onSoundSelected(
                                 AlarmSound(
-                                    id = it,
-                                    name = "Selected Sound",
-                                    uri = it,
+                                    id = uri,
+                                    name = soundName,
+                                    uri = uri,
                                     type = SoundType.DEFAULT
                                 )
                             )
-                        }
-                        onNavigateBack()
+                        } ?: onNavigateBack()
                     }) {
                         Text(stringResource(R.string.save))
                     }

@@ -177,7 +177,6 @@ fun AudioRecorderScreen(
                 type = SoundType.RECORDED
             )
             onSoundRecorded(sound)
-            onNavigateBack()
         }
     }
 

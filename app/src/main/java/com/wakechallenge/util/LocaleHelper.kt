@@ -16,14 +16,13 @@ object LocaleHelper {
     const val LANGUAGE_THAI = "th"
 
     fun getPersistedLanguage(context: Context): String {
-        return runBlocking {
-            try {
-                val prefs = context.settingsDataStore.data.first()
-                prefs[LANGUAGE_KEY] ?: LANGUAGE_SYSTEM
-            } catch (e: Exception) {
-                LANGUAGE_SYSTEM
-            }
-        }
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        return prefs.getString(LANGUAGE_KEY.name, LANGUAGE_SYSTEM) ?: LANGUAGE_SYSTEM
+    }
+
+    fun persistLanguage(context: Context, language: String) {
+        val prefs = context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+        prefs.edit().putString(LANGUAGE_KEY.name, language).apply()
     }
 
     fun setLocale(context: Context, languageCode: String): Context {

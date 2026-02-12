@@ -86,10 +86,12 @@ fun WakeUpChallengeNavHost() {
 
             // Get selected sound from SoundPicker
             val selectedSoundUri = backStackEntry.savedStateHandle.get<String>("selectedSound")
-            LaunchedEffect(selectedSoundUri) {
-                selectedSoundUri?.let {
-                    viewModel.updateSoundUri(it)
+            val selectedSoundName = backStackEntry.savedStateHandle.get<String>("selectedSoundName")
+            LaunchedEffect(selectedSoundUri, selectedSoundName) {
+                if (selectedSoundUri != null && selectedSoundName != null) {
+                    viewModel.updateSound(selectedSoundUri, selectedSoundName)
                     backStackEntry.savedStateHandle.remove<String>("selectedSound")
+                    backStackEntry.savedStateHandle.remove<String>("selectedSoundName")
                 }
             }
 
@@ -187,11 +189,32 @@ fun WakeUpChallengeNavHost() {
             )
         ) { backStackEntry ->
             val currentUri = backStackEntry.arguments?.getString("currentUri")
+            
+            // Observe results from sub-screens (Recorder/TTS) and chain them back
+            val recordedUri = backStackEntry.savedStateHandle.get<String>("recordedSound")
+            val ttsUri = backStackEntry.savedStateHandle.get<String>("ttsSound")
+            
+            LaunchedEffect(recordedUri, ttsUri) {
+                recordedUri?.let { uri ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedSound", uri)
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedSoundName", "Recorded Sound")
+                    backStackEntry.savedStateHandle.remove<String>("recordedSound")
+                    navController.popBackStack()
+                }
+                ttsUri?.let { uri ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedSound", uri)
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedSoundName", "Voice Message")
+                    backStackEntry.savedStateHandle.remove<String>("ttsSound")
+                    navController.popBackStack()
+                }
+            }
+
             SoundPickerScreen(
                 currentSoundUri = currentUri,
                 onSoundSelected = { sound ->
                     // Handle sound selection - save to previous screen's saved state
                     navController.previousBackStackEntry?.savedStateHandle?.set("selectedSound", sound?.uri)
+                    navController.previousBackStackEntry?.savedStateHandle?.set("selectedSoundName", sound?.name)
                     navController.popBackStack()
                 },
                 onNavigateToRecorder = {

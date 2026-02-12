@@ -46,9 +46,10 @@ class SleepTrackingService : Service(), SensorEventListener {
         const val NOTIFICATION_ID = 2001
 
         // Movement thresholds for sleep phase detection
-        private const val MOVEMENT_THRESHOLD_LOW = 0.5f    // Deep sleep
-        private const val MOVEMENT_THRESHOLD_MED = 1.5f    // Light sleep
-        private const val MOVEMENT_THRESHOLD_HIGH = 3.0f   // REM/Awake
+        // TODO: Make these configurable in settings
+        const val MOVEMENT_THRESHOLD_LOW = 0.5f    // Deep sleep
+        const val MOVEMENT_THRESHOLD_MED = 1.5f    // Light sleep
+        const val MOVEMENT_THRESHOLD_HIGH = 3.0f   // REM/Awake
 
         // Sampling settings
         private const val SAMPLE_WINDOW_MS = 30000L // 30 seconds

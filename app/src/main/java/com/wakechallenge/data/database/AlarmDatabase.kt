@@ -8,8 +8,8 @@ import androidx.room.TypeConverters
 
 @Database(
     entities = [AlarmEntity::class, StatisticsEntity::class, AchievementEntity::class],
-    version = 1,
-    exportSchema = true
+    version = 2,
+    exportSchema = false
 )
 @TypeConverters(AlarmConverters::class)
 abstract class AlarmDatabase : RoomDatabase() {
@@ -30,7 +30,7 @@ abstract class AlarmDatabase : RoomDatabase() {
                     AlarmDatabase::class.java,
                     DATABASE_NAME
                 )
-                    .fallbackToDestructiveMigration()
+                    .fallbackToDestructiveMigration(true)
                     .build()
                 INSTANCE = instance
                 instance

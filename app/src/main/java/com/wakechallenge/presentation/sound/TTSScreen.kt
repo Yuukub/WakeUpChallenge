@@ -7,10 +7,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -27,6 +31,7 @@ fun TTSScreen(
     onNavigateBack: () -> Unit
 ) {
     val context = LocalContext.current
+    val focusManager = LocalFocusManager.current
     var text by remember { mutableStateOf("Good morning! Time to wake up and start your day!") }
     var isTTSReady by remember { mutableStateOf(false) }
     var isSpeaking by remember { mutableStateOf(false) }
@@ -112,7 +117,6 @@ fun TTSScreen(
 
         isSaving = false
         onSoundCreated(sound)
-        onNavigateBack()
     }
 
     Scaffold(
@@ -142,6 +146,11 @@ fun TTSScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = {
+                        focusManager.clearFocus()
+                    })
+                }
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
@@ -208,7 +217,7 @@ fun TTSScreen(
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .menuAnchor()
+                        .menuAnchor(MenuAnchorType.PrimaryNotEditable, true)
                 )
                 ExposedDropdownMenu(
                     expanded = expanded,

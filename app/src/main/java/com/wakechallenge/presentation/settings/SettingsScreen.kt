@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -191,7 +192,7 @@ fun SettingsScreen(
 
             item {
                 SettingsSwitch(
-                    icon = Icons.Default.VolumeUp,
+                    icon = Icons.AutoMirrored.Filled.VolumeUp,
                     title = stringResource(R.string.settings_gradual_volume),
                     description = stringResource(R.string.settings_gradual_volume_desc),
                     checked = defaultGradualVolume,
@@ -303,6 +304,7 @@ fun SettingsScreen(
                                 .clickable {
                                     appLanguage = code
                                     saveString(LocaleHelper.LANGUAGE_KEY, code)
+                                    LocaleHelper.persistLanguage(context, code)
                                     showLanguagePicker = false
                                     (context as? Activity)?.recreate()
                                 }

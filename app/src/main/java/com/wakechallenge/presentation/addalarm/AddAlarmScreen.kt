@@ -187,6 +187,7 @@ fun AddAlarmScreen(
                 // Sound Selection
                 SoundSection(
                     soundUri = uiState.soundUri,
+                    soundName = uiState.soundName,
                     onSelectSound = onSelectSound
                 )
 
@@ -805,6 +806,7 @@ private fun GradualVolumeSection(
 @Composable
 private fun SoundSection(
     soundUri: String?,
+    soundName: String?,
     onSelectSound: () -> Unit
 ) {
     Column {
@@ -835,10 +837,11 @@ private fun SoundSection(
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = if (soundUri.isNullOrBlank())
-                            stringResource(R.string.sound_default)
-                        else
-                            stringResource(R.string.add_alarm_select_sound),
+                        text = when {
+                            soundName != null -> soundName
+                            soundUri.isNullOrBlank() -> stringResource(R.string.sound_default)
+                            else -> stringResource(R.string.add_alarm_select_sound)
+                        },
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }

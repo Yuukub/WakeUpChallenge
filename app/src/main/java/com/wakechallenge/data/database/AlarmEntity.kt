@@ -23,6 +23,7 @@ data class AlarmEntity(
     val selectedGames: String, // Stored as comma-separated values
     val gameDifficulty: String,
     val soundUri: String?,
+    val soundName: String?,
     val isVibrationEnabled: Boolean,
     val snoozeEnabled: Boolean,
     val snoozeDurationMinutes: Int,
@@ -42,6 +43,7 @@ data class AlarmEntity(
         selectedGames = if (selectedGames.isBlank()) setOf(GameType.MATH) else selectedGames.split(",").map { GameType.valueOf(it) }.toSet(),
         gameDifficulty = GameDifficulty.valueOf(gameDifficulty),
         soundUri = soundUri,
+        soundName = soundName,
         isVibrationEnabled = isVibrationEnabled,
         snoozeEnabled = snoozeEnabled,
         snoozeDurationMinutes = snoozeDurationMinutes,
@@ -64,6 +66,7 @@ data class AlarmEntity(
             selectedGames = alarm.selectedGames.joinToString(",") { it.name },
             gameDifficulty = alarm.gameDifficulty.name,
             soundUri = alarm.soundUri,
+            soundName = alarm.soundName,
             isVibrationEnabled = alarm.isVibrationEnabled,
             snoozeEnabled = alarm.snoozeEnabled,
             snoozeDurationMinutes = alarm.snoozeDurationMinutes,

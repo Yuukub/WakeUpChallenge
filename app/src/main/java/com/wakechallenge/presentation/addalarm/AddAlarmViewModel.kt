@@ -25,6 +25,7 @@ data class AddAlarmUiState(
     val selectedGames: Set<GameType> = setOf(GameType.MATH),
     val gameDifficulty: GameDifficulty = GameDifficulty.MEDIUM,
     val soundUri: String? = null,
+    val soundName: String? = null,
     val isVibrationEnabled: Boolean = true,
     val snoozeEnabled: Boolean = true,
     val snoozeDurationMinutes: Int = 5,
@@ -57,6 +58,7 @@ class AddAlarmViewModel @Inject constructor(
                     selectedGames = alarm.selectedGames,
                     gameDifficulty = alarm.gameDifficulty,
                     soundUri = alarm.soundUri,
+                    soundName = alarm.soundName,
                     isVibrationEnabled = alarm.isVibrationEnabled,
                     snoozeEnabled = alarm.snoozeEnabled,
                     snoozeDurationMinutes = alarm.snoozeDurationMinutes,
@@ -132,8 +134,8 @@ class AddAlarmViewModel @Inject constructor(
         _uiState.update { it.copy(gradualVolumeDurationSeconds = seconds) }
     }
 
-    fun updateSoundUri(uri: String?) {
-        _uiState.update { it.copy(soundUri = uri) }
+    fun updateSound(uri: String?, name: String?) {
+        _uiState.update { it.copy(soundUri = uri, soundName = name) }
     }
 
     fun saveAlarm() {
@@ -148,6 +150,7 @@ class AddAlarmViewModel @Inject constructor(
                 selectedGames = state.selectedGames,
                 gameDifficulty = state.gameDifficulty,
                 soundUri = state.soundUri,
+                soundName = state.soundName,
                 isVibrationEnabled = state.isVibrationEnabled,
                 snoozeEnabled = state.snoozeEnabled,
                 snoozeDurationMinutes = state.snoozeDurationMinutes,

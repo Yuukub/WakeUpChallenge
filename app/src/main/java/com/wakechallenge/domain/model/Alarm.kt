@@ -12,6 +12,7 @@ data class Alarm(
     val selectedGames: Set<GameType> = setOf(GameType.MATH),
     val gameDifficulty: GameDifficulty = GameDifficulty.MEDIUM,
     val soundUri: String? = null,
+    val soundName: String? = null,
     val isVibrationEnabled: Boolean = true,
     val snoozeEnabled: Boolean = true,
     val snoozeDurationMinutes: Int = 5,

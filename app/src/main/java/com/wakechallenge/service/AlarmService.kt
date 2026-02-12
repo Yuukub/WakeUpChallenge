@@ -23,8 +23,12 @@ import com.wakechallenge.data.repository.AlarmRepository
 import dagger.hilt.android.AndroidEntryPoint
 import android.util.Log
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -47,6 +51,8 @@ class AlarmService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+    private var textToSpeech: TextToSpeech? = null
+    private var isTTSReady = false
     private var currentAlarmId: Long = -1
     private var volumeJob: Job? = null
     private val serviceScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
@@ -62,6 +68,16 @@ class AlarmService : Service() {
         } else {
             @Suppress("DEPRECATION")
             getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+        
+        initializeTTS()
+    }
+
+    private fun initializeTTS() {
+        textToSpeech = TextToSpeech(this) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                isTTSReady = true
+            }
         }
     }
 
@@ -100,24 +116,29 @@ class AlarmService : Service() {
             }
 
             // Start sound
-            startAlarmSound(alarm.soundUri, alarm.gradualVolumeEnabled, alarm.gradualVolumeDurationSeconds)
+            if (alarm.soundUri?.startsWith("tts://") == true) {
+                playTTSSound(alarm.soundUri)
+            } else {
+                startAlarmSound(alarm.soundUri, alarm.gradualVolumeEnabled, alarm.gradualVolumeDurationSeconds)
+            }
 
             // Launch alarm activity
             val alarmActivityIntent = Intent(this@AlarmService, AlarmActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 putExtra(AlarmReceiver.EXTRA_ALARM_ID, alarmId)
             }
-            startActivity(alarmActivityIntent)
+            
+            try {
+                startActivity(alarmActivityIntent)
+            } catch (e: Exception) {
+                Log.e(TAG, "Failed to start AlarmActivity: ${e.message}", e)
+                // Activity might be blocked by background restrictions, 
+                // but notification fullScreenIntent should handle it.
+            }
         }
     }
 
     private fun startAlarmSound(soundUri: String?, gradualVolume: Boolean, gradualDurationSeconds: Int) {
-        val uri = if (soundUri.isNullOrBlank()) {
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-        } else {
-            android.net.Uri.parse(soundUri)
-        }
-
         try {
             mediaPlayer = MediaPlayer().apply {
                 setAudioAttributes(
@@ -126,7 +147,16 @@ class AlarmService : Service() {
                         .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                         .build()
                 )
-                setDataSource(this@AlarmService, uri)
+                
+                if (soundUri.isNullOrBlank()) {
+                    setDataSource(this@AlarmService, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
+                } else if (soundUri.startsWith("/")) {
+                    // Absolute path for recorded sound
+                    setDataSource(soundUri)
+                } else {
+                    setDataSource(this@AlarmService, android.net.Uri.parse(soundUri))
+                }
+                
                 isLooping = true
                 prepare()
 
@@ -141,24 +171,92 @@ class AlarmService : Service() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to start alarm sound: ${e.message}", e)
-            // Fallback to default alarm sound
-            try {
-                val defaultUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
-                mediaPlayer = MediaPlayer().apply {
-                    setAudioAttributes(
-                        AudioAttributes.Builder()
-                            .setUsage(AudioAttributes.USAGE_ALARM)
-                            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                            .build()
-                    )
-                    setDataSource(this@AlarmService, defaultUri)
-                    isLooping = true
-                    prepare()
-                    setVolume(1f, 1f)
-                    start()
+            fallbackToDefaultSound()
+        }
+    }
+
+    private fun fallbackToDefaultSound() {
+        try {
+            val defaultUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
+            mediaPlayer = MediaPlayer().apply {
+                setAudioAttributes(
+                    AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_ALARM)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build()
+                )
+                setDataSource(this@AlarmService, defaultUri)
+                isLooping = true
+                prepare()
+                setVolume(1f, 1f)
+                start()
+            }
+        } catch (e2: Exception) {
+            Log.e(TAG, "Failed to play default alarm sound: ${e2.message}", e2)
+        }
+    }
+
+    private fun playTTSSound(uriString: String) {
+        val soundId = uriString.substringAfter("tts://")
+        val prefs = getSharedPreferences("tts_sounds", Context.MODE_PRIVATE)
+        val text = prefs.getString("${soundId}_text", "Good morning! Time to wake up!") ?: ""
+        val localeStr = prefs.getString("${soundId}_locale", "en_US") ?: "en_US"
+        val rate = prefs.getFloat("${soundId}_rate", 1.0f)
+        val pitch = prefs.getFloat("${soundId}_pitch", 1.0f)
+
+        serviceScope.launch {
+            // Wait for TTS to be ready
+            var retry = 0
+            while (!isTTSReady && retry < 10) {
+                delay(500)
+                retry++
+            }
+
+            if (isTTSReady) {
+                textToSpeech?.apply {
+                    val locale = if (localeStr.contains("_")) {
+                        val parts = localeStr.split("_")
+                        Locale(parts[0], parts[1])
+                    } else {
+                        Locale(localeStr)
+                    }
+                    language = locale
+                    setSpeechRate(rate)
+                    setPitch(pitch)
+                    
+                    // Set audio attributes for alarm usage
+                    @Suppress("DEPRECATION")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        setAudioAttributes(
+                            AudioAttributes.Builder()
+                                .setUsage(AudioAttributes.USAGE_ALARM)
+                                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                                .build()
+                        )
+                    }
+
+                    // Use a unique ID to loop manually if needed, 
+                    // or just play once. Standard alarms usually loop.
+                    speak(text, TextToSpeech.QUEUE_FLUSH, null, "alarm_tts")
+                    
+                    setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+                        override fun onStart(utteranceId: String?) {}
+                        override fun onDone(utteranceId: String?) {
+                            // Loop for alarm
+                            if (utteranceId == "alarm_tts") {
+                                serviceScope.launch {
+                                    delay(2000) // Small pause between repeats
+                                    speak(text, TextToSpeech.QUEUE_FLUSH, null, "alarm_tts")
+                                }
+                            }
+                        }
+                        override fun onError(utteranceId: String?) {
+                            fallbackToDefaultSound()
+                        }
+                    })
                 }
-            } catch (e2: Exception) {
-                Log.e(TAG, "Failed to play default alarm sound: ${e2.message}", e2)
+            } else {
+                fallbackToDefaultSound()
             }
         }
     }
@@ -189,20 +287,35 @@ class AlarmService : Service() {
     }
 
     private fun stopAlarm() {
-        serviceScope.launch {
-            alarmMutex.withLock {
-                volumeJob?.cancel()
-                try {
-                    mediaPlayer?.apply {
-                        if (isPlaying) stop()
-                        release()
-                    }
-                } catch (e: Exception) {
-                    Log.e(TAG, "Error stopping media player: ${e.message}", e)
-                }
-                mediaPlayer = null
-                vibrator?.cancel()
+        // Use a non-cancellable scope if possible, or just GlobalScope for cleanup, 
+        // but better to just use the existing scope if it's active.
+        // If getting called from UI/Action, we use a coroutine.
+        if (serviceScope.isActive) {
+            serviceScope.launch {
+                stopAlarmInternal()
             }
+        } else {
+            // Fallback if scope is already dead (unlikely here but good capability)
+            runBlocking {
+                stopAlarmInternal()
+            }
+        }
+    }
+
+    private suspend fun stopAlarmInternal() {
+        alarmMutex.withLock {
+            volumeJob?.cancel()
+            try {
+                mediaPlayer?.apply {
+                    if (isPlaying) stop()
+                    release()
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error stopping media player: ${e.message}", e)
+            }
+            mediaPlayer = null
+            vibrator?.cancel()
+            textToSpeech?.stop()
         }
     }
 
@@ -227,12 +340,11 @@ class AlarmService : Service() {
 
     private fun rescheduleAllAlarms() {
         serviceScope.launch {
-            alarmRepository.getEnabledAlarms().collect { alarms ->
-                alarms.forEach { alarm ->
-                    alarmScheduler.scheduleAlarm(alarm)
-                }
-                stopSelf()
+            val alarms = alarmRepository.getEnabledAlarms().first()
+            alarms.forEach { alarm ->
+                alarmScheduler.scheduleAlarm(alarm)
             }
+            stopSelf()
         }
     }
 
@@ -270,10 +382,11 @@ class AlarmService : Service() {
         return NotificationCompat.Builder(this, WakeUpChallengeApp.ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_alarm)
             .setContentTitle("Wake Up Challenge")
-            .setContentText("Time to wake up! Complete a game to dismiss.")
+            .setContentText("ถึงเวลาตื่นแล้ว! แตะที่นี่เพื่อเล่นเกมและปิดเสียงปลุก")
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_ALARM)
             .setFullScreenIntent(fullScreenPendingIntent, true)
+            .setContentIntent(fullScreenPendingIntent) // Ensure tapping notification opens activity
             .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
             .addAction(R.drawable.ic_dismiss, "Dismiss", dismissPendingIntent)
             .setOngoing(true)
@@ -282,7 +395,11 @@ class AlarmService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopAlarm()
+        // Run cleanup synchronously to ensure it happens before process death
+        runBlocking {
+            stopAlarmInternal()
+        }
+        textToSpeech?.shutdown()
         serviceScope.cancel()
     }
 }

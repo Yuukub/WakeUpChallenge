@@ -25,7 +25,7 @@ class GameViewModel @Inject constructor(
     private val alarmRepository: AlarmRepository,
     private val alarmScheduler: AlarmScheduler,
     private val statisticsDao: StatisticsDao,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _alarm = MutableStateFlow<Alarm?>(null)

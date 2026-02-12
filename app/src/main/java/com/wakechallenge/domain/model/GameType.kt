@@ -6,8 +6,8 @@ import androidx.compose.ui.res.stringResource
 import com.wakechallenge.R
 
 enum class GameType(
-    @StringRes val displayNameRes: Int,
-    @StringRes val descriptionRes: Int,
+    @param:StringRes val displayNameRes: Int,
+    @param:StringRes val descriptionRes: Int,
     val iconName: String,
     // Keep for backwards compatibility - used in non-Composable contexts
     val displayName: String,
@@ -65,7 +65,7 @@ fun GameType.localizedDisplayName(): String = stringResource(displayNameRes)
 fun GameType.localizedDescription(): String = stringResource(descriptionRes)
 
 enum class GameDifficulty(
-    @StringRes val displayNameRes: Int,
+    @param:StringRes val displayNameRes: Int,
     // Keep for backwards compatibility
     val displayName: String
 ) {
