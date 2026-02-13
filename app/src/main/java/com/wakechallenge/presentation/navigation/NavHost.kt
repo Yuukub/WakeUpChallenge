@@ -104,7 +104,8 @@ fun WakeUpChallengeNavHost() {
                 },
                 onSelectSound = {
                     val currentUri = viewModel.uiState.value.soundUri ?: ""
-                    navController.navigate(Screen.SoundPicker.createRoute(currentUri))
+                    val encodedUri = android.net.Uri.encode(currentUri)
+                    navController.navigate(Screen.SoundPicker.createRoute(encodedUri))
                 }
             )
         }
@@ -188,7 +189,7 @@ fun WakeUpChallengeNavHost() {
                 }
             )
         ) { backStackEntry ->
-            val currentUri = backStackEntry.arguments?.getString("currentUri")
+            val currentUri = android.net.Uri.decode(backStackEntry.arguments?.getString("currentUri"))
             
             // Observe results from sub-screens (Recorder/TTS) and chain them back
             val recordedUri = backStackEntry.savedStateHandle.get<String>("recordedSound")

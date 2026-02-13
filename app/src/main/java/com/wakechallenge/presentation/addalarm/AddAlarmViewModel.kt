@@ -47,6 +47,9 @@ class AddAlarmViewModel @Inject constructor(
     val uiState: StateFlow<AddAlarmUiState> = _uiState.asStateFlow()
 
     fun loadAlarm(alarmId: Long) {
+        // Prevent reloading if we already have this alarm loaded (avoids overwritting edits)
+        if (_uiState.value.alarmId == alarmId) return
+
         viewModelScope.launch {
             val alarm = alarmRepository.getAlarmById(alarmId) ?: return@launch
             _uiState.update {

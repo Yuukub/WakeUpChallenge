@@ -81,6 +81,11 @@ fun SoundPickerScreen(
                 uri = it.toString(),
                 type = SoundType.MUSIC
             )
+            try {
+                context.contentResolver.takePersistableUriPermission(it, android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } catch (e: Exception) {
+                // Ignore if not supported
+            }
             onSoundSelected(sound)
         }
     }
@@ -137,15 +142,23 @@ fun SoundPickerScreen(
                     TextButton(onClick = {
                         mediaPlayer?.release()
                         selectedSound?.let { uri ->
+                            val type = when {
+                                defaultSounds.any { it.uri == uri } -> SoundType.DEFAULT
+                                uri.startsWith("tts://") -> SoundType.TTS
+                                else -> SoundType.MUSIC
+                            }
+                            
                             val soundName = defaultSounds.find { it.uri == uri }?.name 
-                                ?: if (uri.startsWith("content://")) "Custom Music" else "Selected Sound"
+                                ?: if (type == SoundType.TTS) "Voice Message"
+                                else if (uri.startsWith("content://")) "Custom Music" 
+                                else "Selected Sound"
                             
                             onSoundSelected(
                                 AlarmSound(
                                     id = uri,
                                     name = soundName,
                                     uri = uri,
-                                    type = SoundType.DEFAULT
+                                    type = type
                                 )
                             )
                         } ?: onNavigateBack()

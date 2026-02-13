@@ -100,6 +100,7 @@ class AlarmService : Service() {
                 snoozeAlarm()
             }
             ACTION_RESCHEDULE_ALARMS -> {
+                startForeground(NOTIFICATION_ID + 1, createRescheduleNotification())
                 rescheduleAllAlarms()
             }
         }
@@ -344,6 +345,7 @@ class AlarmService : Service() {
             alarms.forEach { alarm ->
                 alarmScheduler.scheduleAlarm(alarm)
             }
+            stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
     }
@@ -351,12 +353,23 @@ class AlarmService : Service() {
     private fun createNotification(alarmId: Long): Notification {
         val fullScreenIntent = Intent(this, AlarmActivity::class.java).apply {
             putExtra(AlarmReceiver.EXTRA_ALARM_ID, alarmId)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or 
+                     Intent.FLAG_ACTIVITY_SINGLE_TOP or 
+                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                     Intent.FLAG_ACTIVITY_NO_USER_ACTION)
         }
+        
+        val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        } else {
+            PendingIntent.FLAG_UPDATE_CURRENT
+        }
+
         val fullScreenPendingIntent = PendingIntent.getActivity(
             this,
             0,
             fullScreenIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            flags
         )
 
         val snoozeIntent = Intent(this, AlarmService::class.java).apply {
@@ -390,6 +403,16 @@ class AlarmService : Service() {
             .addAction(R.drawable.ic_snooze, "Snooze", snoozePendingIntent)
             .addAction(R.drawable.ic_dismiss, "Dismiss", dismissPendingIntent)
             .setOngoing(true)
+            .build()
+    }
+
+    private fun createRescheduleNotification(): Notification {
+        return NotificationCompat.Builder(this, WakeUpChallengeApp.TRACKING_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_alarm)
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText("Rescheduling alarms...")
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
 

@@ -45,7 +45,7 @@
         <!-- Alarm Activity - Shows on lock screen -->
         <activity
             android:name=".AlarmActivity"
-            android:exported="false"
+            android:exported="true"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
